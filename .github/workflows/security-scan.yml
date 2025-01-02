@@ -35,11 +35,10 @@ jobs:
           ./bin/gosec ./...
 
       # Step 6: Run golangci-lint for linting (optional but recommended)
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.54.2
-          args: run
+      - name: Run GolangCI-Lint
+        run: golangci-lint run ./...
+        working-directory: ./Hosting-ServerCore
+
 
       # Step 7: Run Trivy for dependency scanning
       - name: Run Trivy
