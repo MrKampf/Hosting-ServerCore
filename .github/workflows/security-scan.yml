@@ -24,20 +24,24 @@ jobs:
       - name: Install Dependencies
         run: go mod tidy
 
-      # Step 4: Run gosec for security analysis
+      # Step 4: Set Working Directory
+      - name: Set Working Directory
+        run: cd ${{ github.workspace }}
+
+      # Step 5: Run gosec for security analysis
       - name: Run gosec
         run: |
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.17.0
           ./bin/gosec ./...
 
-      # Step 5: Run golangci-lint for linting (optional but recommended)
+      # Step 6: Run golangci-lint for linting (optional but recommended)
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.54.2
           args: run
 
-      # Step 6: Run Trivy for dependency scanning
+      # Step 7: Run Trivy for dependency scanning
       - name: Run Trivy
         run: |
           curl -sfL https://aquasecurity.github.io/trivy/install.sh | sh
