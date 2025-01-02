@@ -1,0 +1,44 @@
+name: Go Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20  # Use the desired Go version
+
+      # Step 3: Install Dependencies
+      - name: Install Dependencies
+        run: go mod tidy
+
+      # Step 4: Run gosec for security analysis
+      - name: Run gosec
+        run: |
+          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.17.0
+          ./bin/gosec ./...
+
+      # Step 5: Run golangci-lint for linting (optional but recommended)
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.54.2
+          args: run
+
+      # Step 6: Run Trivy for dependency scanning
+      - name: Run Trivy
+        run: |
+          curl -sfL https://aquasecurity.github.io/trivy/install.sh | sh
+          ./trivy fs .
