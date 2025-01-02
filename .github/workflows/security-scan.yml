@@ -37,7 +37,7 @@ jobs:
       # Step 6: Run golangci-lint for linting (optional but recommended)
       - name: Run GolangCI-Lint
         run: golangci-lint run ./...
-        working-directory: ./Hosting-ServerCore
+        working-directory: ./
 
 
       # Step 7: Run Trivy for dependency scanning
